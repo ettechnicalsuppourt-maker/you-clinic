@@ -35,6 +35,8 @@ const translations = {
     "nav.locations": "Branches",
     "nav.faq": "FAQ",
     "nav.book": "Book VIP Consultation",
+    "mobile.call": "Call",
+    "mobile.book": "Book VIP",
     "lang.toggle": "العربية",
 
     /* Hero */
@@ -274,6 +276,8 @@ const translations = {
     "nav.locations": "الفروع",
     "nav.faq": "الأسئلة الشائعة",
     "nav.book": "حجز موعد VIP",
+    "mobile.call": "اتصال",
+    "mobile.book": "حجز VIP",
     "lang.toggle": "English",
 
     /* Hero */
@@ -573,16 +577,41 @@ function initStickyHeader() {
 function initMobileMenu() {
   const toggle = document.querySelector('.mobile-menu-toggle');
   const drawer = document.querySelector('.mobile-nav-drawer');
+  const closeBtn = document.querySelector('.drawer-close-btn');
   if (!toggle || !drawer) return;
 
+  const openDrawer = () => {
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeDrawer = () => {
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
   toggle.addEventListener('click', () => {
-    drawer.classList.toggle('open');
+    if (drawer.classList.contains('open')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
   });
 
-  drawer.querySelectorAll('.mobile-nav-link').forEach(link => {
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeDrawer);
+  }
+
+  drawer.querySelectorAll('.mobile-nav-link, [data-open-modal]').forEach(link => {
     link.addEventListener('click', () => {
-      drawer.classList.remove('open');
+      closeDrawer();
     });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      closeDrawer();
+    }
   });
 }
 
